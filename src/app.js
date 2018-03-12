@@ -7,16 +7,18 @@ require('dotenv').config({
 
 const express = require('express')
 const app = express()
-const {
-    port
-} = require('../src/config/default')
+const { port } = require('../src/config/default')
+
+try {
+    console.log('Attempting to establish database connection...')
+    require('./services/database')
+} catch (err) {
+    throw err
+}
 
 app.set('PORT', port)
 
-app.route('/').get((req, res) => {
-    res.json({
-        message: 'Setup successful!'
-    })
-})
+
+require('./modules/index').modules(app)
 
 module.exports = app
