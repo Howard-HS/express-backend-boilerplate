@@ -20,6 +20,7 @@ mongoose.connection.on('disconnected', () => {
     console.log('\nMongoose disconnected')
 })
 
+// gracefulShutdown concept inspired by MEAN stack
 const gracefulShutdown = (msg, callback) => {
     mongoose.connection.close(() => {
         console.log('Mongoose disconnected through ' + msg)
@@ -27,6 +28,7 @@ const gracefulShutdown = (msg, callback) => {
     })
 }
 
+// Important to use process.once, else nodemon restart will stuck in a loop
 process.once('SIGUSR2', () => {
     gracefulShutdown('nodemon restart', () => {
         process.kill(process.pid, 'SIGUSR2')
@@ -46,3 +48,4 @@ process.on('SIGTERM', () => {
 })
 
 //Import models here
+// require('PATH_TO_YOUR_MODELS')
